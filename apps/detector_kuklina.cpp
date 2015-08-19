@@ -50,26 +50,33 @@ int main(int argc, char** argv)
     bool use_camera = parser.get<bool>("camera");
 
     // TODO: Load detector.
-    CascadeClassifier::load(detector_file);
+	cv::CascadeClassifier *cascade = 0;
+	cascade.load(detector_file);
 
+   
     if (!image_file.empty())
     {
         Mat image;
-	image = imread(image_file);
-	vector<Rect>& objects;
-	CascadeClassifier::detectMultiScale(image, objects, 1.1, 3, 0, Size(), Size());
-	drawDetections(objects, green, matrix);
+		image = imread(image_file);
+		vector<Rect>& objects;
+		//cascade.detectMultiScale(image, objects, 1.1, 3, 0, Size(), Size());
+		drawDetections(objects, green, image);
     }
     else if (!video_file.empty())
     {
-	Mat image;
-        VideoCapture::open(video_file);
-	VideoCapture::read(image);
+	/*Mat image;
 	vector<Rect>& objects;
-	CascadeClassifier::detectMultiScale(image, objects, 1.1, 3, 0, Size(), Size());
-	drawDetections(objects, green, image);
-	VideoCapture::release();
+        VideoCapture::open(video_file);
+	while(VideoCapture::read(image))
+	{
+		CascadeClassifier::detectMultiScale(image, objects, 1.1, 3, 0, Size(), Size());
+		drawDetections(objects, green, image);
+	}
+	while(VideoCapture::grab());
+	VideoCapture::release();*/
     }
+
+
     else if (use_camera)
     {
         // TODO: Detect objects on a live video stream from camera.
